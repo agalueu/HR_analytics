@@ -30,7 +30,7 @@ images/     → screenshots of dashboards (Power BI) and query results (pgAdmin)
 README.md   → project summary and instructions  
 
 
-##🚀 How to Reproduce
+## 🚀 How to Reproduce
 - Create a PostgreSQL database:
 - In pgAdmin → right-click Databases → Create - Database → name it hr_analytics.
 - Schema & Data Import
