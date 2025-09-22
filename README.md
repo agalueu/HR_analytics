@@ -6,7 +6,7 @@ The goal is to identify patterns across departments and employee bands using Pos
 
 ## 📊 Dataset
 - Source: Sample HR dataset (public, anonymized)
-- Size: ~500 rows (this repo includes the file used: employee.csv)
+- Size: small data 20 em ployees 5 departments (this repo includes the file used: HR_employee.csv and HR_departments.cvs)
 - Privacy: Public, no sensitive information
 
 ## ⚙️ Tools
@@ -35,7 +35,7 @@ README.md   → project summary and instructions
 - In pgAdmin → right-click Databases → Create - Database → name it hr_analytics.
 - Schema & Data Import
 - Run the schema script in sql/schema.sql to create the employee table.
-- Import the sample dataset employee.csv.
+- Import the sample dataset HR_employee.csv and HR_departments.cvs.
 
 ## Analysis Queries
 - Queries are in sql/analysis.sql.
