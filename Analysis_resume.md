@@ -163,3 +163,36 @@ Business Insight:
 Highlights high-performing, experienced employees.
 
 Supports succession planning and retention strategies.
+
+9️⃣ Top 2 Highest-Paid Employees per Department with 5+ Years Tenure
+
+Query Purpose:
+Identify the top 2 highest-paid employees in each department who have more than 5 years of tenure, combining compensation and experience to highlight key contributors.
+
+Steps:
+
+Create a CTE (result) to select employee details: employee ID, first name, last name, department, salary, hire date.
+
+Use a second CTE (ranked) to:
+
+Assign a salary rank within each department using:
+
+RANK() OVER (PARTITION BY department ORDER BY salary DESC)
+
+
+Calculate tenure in years using:
+
+EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date))
+
+
+Filter for employees who are ranked in the top 2 salaries and have tenure ≥ 5 years.
+
+Output all relevant employee information for these top earners.
+
+Business Insight:
+
+Highlights experienced high performers critical to department success.
+
+Supports succession planning, retention strategies, and reward allocation.
+
+Combines salary and tenure metrics for more nuanced workforce analysis.
