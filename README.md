@@ -57,7 +57,7 @@ For the visualization layer, I connected Power BI directly to PostgreSQL:
 
 ## 📸 Images Shared
 - Salary distribution by band per department [Salary Distribution](images/Salary_distribution.png)
-- Tenure band analysis [Tenura band](images/ternure_bands.png)
+- Tenure band analysis [Tenure band](images/ternure_bands.png)
 - Scatter chart with average salary reference line [Highlight top selling category](images/Highlight_top_selling_category.png)
 - Ranking within departments [Highlight top selling category](images/Highlight_top_selling_category.png)
 - Power BI dashboards overview [Highlight top selling category](images/Highlight_top_selling_category.png)
