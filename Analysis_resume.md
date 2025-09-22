@@ -1,165 +1,165 @@
-In this section I´m going to talk about some results in the different queries that i did in the analysis.sql file, what was the purpose, steps to do it and business insight for this analysis
+This section contains SQL queries for analyzing employee data, focusing on salary, tenure, and performance metrics across departments. The queries demonstrate HR analytics skills and highlight insights for workforce planning and compensation strategies.
 
-## 1. Profit hotspot (TOP and BOTTOM KPIs on power BI)
-## Query Purpose:
-This query analyzes sales and profitability performance across different regions and customer segments.
+1️⃣ Salary Distribution by Band
 
-##Steps:
-- Aggregate sales and profit from the Orders and Order_Details tables, grouped by Region and Segment.
-- Use a CTE to simplify logic and make the query more modular.
-- Calculate Profit Margin as a percentage:
+Query Purpose:
+Analyze employee salary distribution across departments by categorizing salaries into High, Medium, and Low bands.
 
-Profit Margin = Total Profit / Total Sales × 100
+Steps:
 
-- Rank the results by highest margin to identify the most profitable regions/segments.
+Assign each employee a decile within their department using NTILE(10).
 
-## Business Insight:
-This query helps reveal which region + segment combinations are the most profitable. For example, management might use this to decide which segments to prioritize in marketing or where to adjust pricing/discount strategies.
+Categorize deciles into salary bands:
 
-## 2. Total sales per product
-## Query Purpose
-This query identifies the top-selling products by year, showing how sales performance evolves over time at the product level.
+High: Deciles 1–3
 
-##Steps / Logic
-- Join tables:
-      * products → to get product names
-      * order_details → to get sales amounts per product
-      * orders → to bring in the order dates
+Medium: Deciles 4–7
 
-- Extract year: Use EXTRACT(YEAR FROM o.order_date) to group sales by year.
+Low: Deciles 8–10
 
-- Aggregate: SUM(sales) → calculate total sales per product per year.
+Count the number of employees per department and salary band.
 
-- Group & Order:
-      * Group by product and year
-      * Sort results by total_sales DESC to highlight best performers.
+Business Insight:
 
-## Business Insight
-This query reveals which products drive the most revenue each year.
-Helps identify:
-    - Consistently strong products (long-term bestsellers)
-    - Seasonal or trend-driven products (peaks in certain years)
-Useful for product strategy, inventory planning, and targeted promotions.
+Reveals salary structure per department.
 
-## 3. Sales trends by Category
-## Query Purpose
-This query calculates year-over-year (YoY) sales growth by product category, showing how sales performance evolves over time.
+Identifies departments with retention risks or concentration of high salaries.
 
-## Steps / Logic
-- CTE – sales:
-    * Join products, order_details, and orders
-    * Aggregate sales by category and year
-    * Round totals for cleaner output
+Supports pay equity and compensation planning.
 
-- CTE – preview:
-Use the LAG() window function to get the previous year’s sales for each category (previews_value).
+2️⃣ Percentage of Employees in Each Salary Band
 
-- Final Select:
-Calculate YoY Growth % as:
+Query Purpose:
+Calculate the percentage of employees in each salary band per department.
 
-  YoYGrowth = (this year sales - previous year sales) / previous year sales * 100
+Steps:
 
-Use NULLIF(previews_value, 0) to avoid division by zero errors.
+Assign deciles and categorize salary bands (High, Medium, Low).
 
-Present results by Category, Year, Sales, and YoY Growth.
+Count employees per department and band.
 
-## Business Insight
-This query highlights how each product category is growing (or declining) year over year. Useful for:
-    - Spotting high-growth categories worth investing in
-    - Detecting categories in decline that may need strategy changes
-    - Comparing year-over-year performance across categories
+Calculate the percentage of employees in each band relative to the department total.
 
-## 4. Compute YoY growth for both sales and profit. AND show rank changes from the previous year for each category
-## Query Purpose
-This query evaluates category-level sales and profit performance across regions and years, including rankings, growth rates, and cumulative trends.
+Business Insight:
 
-## Steps / Logic
-- CTE – sales:
-    * Join customers, orders, order_details, and products.
-    * Aggregate sales and profit by category, region, and year.
+Provides a normalized view of salary distribution.
 
-- CTE – ranked:
-    * Assign rankings within each region & year:
-    * RANK() OVER (PARTITION BY region, year ORDER BY total_sales DESC) → sales rank
-    * RANK() OVER (PARTITION BY region, year ORDER BY total_profit DESC) → profit rank
-    * Compute cumulative sales per category over time.
-    * Use LAG() to capture the previous year’s sales and profit for YoY comparison.
+Helps HR detect imbalances or inequities.
 
-- CTE – final_results:
-    * Calculate YoY growth % for both sales and profit.
-    * Use LAG() again to compare current ranking vs previous year’s rank → determine rank changes.
+Supports strategic compensation adjustments.
 
-- Final SELECT:
-    * Output category, region, year, sales, profit, cumulative sales, YoY growth, ranks, and rank changes.
-    * Order results by category, region, and year for a clean timeline.
+3️⃣ Tenure Distribution by Department
 
-## Business Insight
-This query provides a holistic performance analysis by:
-    * Showing which categories dominate sales & profit in each region/year.
-    * Tracking growth trends (YoY %).
-    * Highlighting cumulative sales progression (long-term value creation).
-    * Measuring rank shifts → which categories are climbing or losing ground year to year.
+Query Purpose:
+Analyze employee tenure across departments, categorized as New, Mid, Experienced.
 
-## 5. Highlight the top-selling category each year.
-## Query Purpose
-This query finds the top-selling product category each year, highlighting which category dominated annually in terms of total sales.
+Steps:
 
-## Steps / Logic
-- CTE – total:
-     * Join products, order_details, and orders.
-     * Aggregate total sales and total profit per category and year.
+Calculate tenure in years for each employee.
 
-- CTE – ranked:
-     * Use DENSE_RANK() to rank categories within each year by total sales.
+Categorize employees:
 
-- Final SELECT:
-     * Filter to only rank = 1, i.e., the top-selling category for each year.
-     * Show category, year, total sales, and total profit.
+New: 0–2 years
 
-## Business Insight
-- Reveals the leading category by sales year over year.
-- Useful for tracking shifts in market dominance — e.g., if Technology was #1 in early years but Office Supplies overtakes later.
-- Can inform category-level investment and long-term trend analysis.
+Mid: 2–5 years
 
-## 6. Which product categories and subcategories drive the most profit?
-## Query Purpose
-This query ranks product categories by sales and profit within each region and year.
+Experienced: >5 years
 
-## Steps / Logic
-- CTE – sales:
-    * Join customers, orders, order_details, and products.
-    * Aggregate total sales and total profit per category, region, and year.
+Count employees per department and tenure band.
 
-- Final SELECT:
-    * Output aggregated values.
-    * Use RANK() OVER (PARTITION BY region, year ORDER BY total_sales DESC) → ranks categories by sales within each region/year.
-    * Use RANK() OVER (PARTITION BY region, year ORDER BY total_profit DESC) → ranks categories by profit within each region/year.
+Business Insight:
 
-## Business Insight
-- Quickly identifies the top-performing categories by sales and profit for each region in each year.
-- Helps reveal if a category is strong in revenue but weak in profitability (or vice versa).
-- Supports decisions around regional product strategy — e.g., where to expand, cut, or adjust pricing.
+Highlights departments with high proportions of new hires or experienced staff.
 
-## 7. What customer segments and region combined are most valuable?
-## Query Purpose
-This query evaluates customer segments within each region by ranking them across sales, profit, and profit margin, then combining those rankings into an overall performance score.
+Supports onboarding, training, and succession planning.
 
-## Steps / Logic
-- CTE – ranked:
-    * Join customers, orders, and order_details.
-    * Aggregate total sales, total profit, and calculate profit margin % per region × segment.
-    * Apply DENSE_RANK():
-        rank_by_sales → rank by total sales (descending) within each region.
-        rank_by_profit → rank by total profit.
-        rank_by_margin → rank by profit margin %.
+4️⃣ Top 10% Salaries per Department
 
-- Final SELECT:
-    * Output totals, ranks, and compute an “Overall Performer” score as the average of the three ranks.
-    * Order results by region and performance score.
+Query Purpose:
+Identify employees in the top 10% of salaries within each department.
 
-## Business Insight
-- Identifies which segments perform best within each region not just in raw sales, but also in profitability and efficiency.
-- The “Overall Performer” score provides a balanced benchmark across multiple KPIs.
-Useful for:
-    * Targeting marketing efforts toward the most profitable and efficient customer groups.
-    * Spotting segments that generate high sales but weak margins (or vice versa).
+Steps:
+
+Assign deciles and ranks to employees by salary per department.
+
+Filter for employees in decile 1 (top 10%).
+
+Business Insight:
+
+Reveals key high-earning talent.
+
+Helps with retention, succession planning, and budgeting.
+
+5️⃣ Top 2 Salaries per Department
+
+Query Purpose:
+Find the top 2 highest-paid employees in each department.
+
+Steps:
+
+Calculate department-level salary ranks.
+
+Select employees with rank ≤ 2.
+
+Include department average salary for comparison.
+
+Business Insight:
+
+Identifies top earners and benchmarks them against departmental averages.
+
+Supports compensation strategy and talent recognition.
+
+6️⃣ Employee Rank Within Department
+
+Query Purpose:
+Assign a salary-based rank to each employee within their department.
+
+Steps:
+
+Select employee details.
+
+Calculate rank using RANK() OVER (PARTITION BY department ORDER BY salary DESC).
+
+Business Insight:
+
+Provides insight into relative positioning of employees.
+
+Useful for performance reviews, promotions, and equity analysis.
+
+7️⃣ Salary vs. Overall Average and Tenure
+
+Query Purpose:
+Compare each employee’s salary to the company-wide average and calculate tenure.
+
+Steps:
+
+Calculate overall average salary.
+
+Compute tenure in years.
+
+Categorize salary as Above Average or At/Below Average.
+
+Business Insight:
+
+Assesses compensation equity relative to experience.
+
+Helps identify employees for potential salary adjustments or development opportunities.
+
+8️⃣ Top 2 Highest-Paid Employees with 5+ Years Tenure
+
+Query Purpose:
+Identify top earners with significant experience in each department.
+
+Steps:
+
+Calculate salary rank per department.
+
+Compute tenure in years.
+
+Filter for rank ≤ 2 and tenure ≥ 5 years.
+
+Business Insight:
+
+Highlights high-performing, experienced employees.
+
+Supports succession planning and retention strategies.
