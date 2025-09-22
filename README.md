@@ -31,19 +31,23 @@ README.md   → project summary and instructions
 
 
 ## 🚀 How to Reproduce
+1. Create a new PostgreSQL database:
 - Create a PostgreSQL database:
 - In pgAdmin → right-click Databases → Create - Database → name it hr_analytics.
 - Schema & Data Import
-- Run the schema script in sql/schema.sql to create the employee table.
+- Run the schema script in sql/schema.sql to create the employee table, can copy [SCHEMA](sql/SCHEMA.sql).
 - Import the sample dataset HR_employee.csv and HR_departments.cvs.
 
 ## Analysis Queries
-- Queries are in sql/analysis.sql.
+- Queries are in [Analysis](sql/Analysis.sql)
 - Examples include: salary banding with NTILE(), tenure categorization with AGE(), and ranking using RANK().
 
 ## 📊 Power BI Integration
-- Connected Power BI directly to PostgreSQL using the native connector.
-- Queries first developed/validated in pgAdmin were then imported into Power BI.
+For the visualization layer, I connected Power BI directly to PostgreSQL:
+
+- All SQL queries were first developed and validated in **pgAdmin**.  
+- Using the native PostgreSQL connector, these queries were imported into Power BI.  
+- This workflow allowed me to rely on **SQL for all data modeling and transformations**, keeping Power BI focused on the **visualization and storytelling** aspects.  
 
 ## Visualizations include:
 - KPI Cards → Total employees, % in each salary band
@@ -52,14 +56,14 @@ README.md   → project summary and instructions
 - Ranking Charts → Salary rank within departments
 
 ## 📸 Images Shared
-- Salary distribution by band per department
-- Tenure band analysis
-- Scatter chart with average salary reference line
-- Ranking within departments
-- Power BI dashboards overview
+- Salary distribution by band per department [Highlight top selling category](images/Highlight_top_selling_category.png)
+- Tenure band analysis [Highlight top selling category](images/Highlight_top_selling_category.png)
+- Scatter chart with average salary reference line [Highlight top selling category](images/Highlight_top_selling_category.png)
+- Ranking within departments [Highlight top selling category](images/Highlight_top_selling_category.png)
+- Power BI dashboards overview [Highlight top selling category](images/Highlight_top_selling_category.png)
 
 ## 📑 Queries, Analysis & Insights
-For detailed SQL queries and insights, see sql/analysis.sql
+For detailed SQL queries and insights, see [Analysis Resume](Analysis_resume.md)
 .
 
 ## Highlights:
