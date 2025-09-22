@@ -1,74 +1,115 @@
-# Superstore Analytics
+HR Analytics
 
-## 📌 Overview
-This project analyzes sales and profitability using the **Superstore dataset**.  
-The goal is to understand sales performance, profitability, and customer trends using **PostgreSQL** and **Power BI**.
+📌 Overview
+This project analyzes employee data to understand salary distribution, tenure, and workforce composition.
+The goal is to identify patterns across departments and employee bands using PostgreSQL and Power BI.
 
-## 📊 Dataset
-- **Source:** Superstore sample dataset (public, used widely in BI training)
-- **Size:** ~10,000 rows (this repo includes the file used for this project: `superstore.csv`)
-- **Privacy:** Public, no sensitive information
+📊 Dataset
 
-## ⚙️ Tools
-- PostgreSQL
-- SQL (CTEs, window functions, aggregates, joins)
-- Power BI (dashboards & KPIs)
+Source: Sample HR dataset (public, anonymized)
 
-## ❓ Key Business Questions
-1. Which are the total sales per product?
-2. Which product categories and subcategories drive the most profit?
-3. How do sales trends by category?
-4. how YoY growth by sales and profit have changed over the years based on product´s category?
-5. What customer segments and region combined are most valuable?
+Size: ~500 rows (this repo includes the file used: employee.csv)
 
-## 📂 Repository Structure
-- `sql/` → database schema, load script, and analysis queries
-- `docs/` → sample dataset, ERD
-- `images/` → screenshots of dashboards (power BI) and queries results (PGadmin)
-- `README.md` → project summary and instructions
+Privacy: Public, no sensitive information
 
-## 🚀 How to Reproduce
-1. Create a new PostgreSQL database:
-The way i did it was directly in PGadmin, in the workspace (the menu at the left) there is the Server section which is localy in my PC, then right-click on databases and create - database, then put the name in this case superstore and click save.
+⚙️ Tools
 
-2. Creating queries at the Query tool workspace (the second icon in the left menu) and start creating tables and importing data, the script i used are in the sql folder as follow:
-   [SCHEMA](sql/SCHEMA.sql)
+PostgreSQL
 
-3. Then i created another query workspace so i dont mix queries from the schema into analysis .. does can be found at [Analysis](sql/Analysis.sql)
+SQL (CTEs, window functions, ranking, aggregations)
 
-## Database Schema & ERD
+Power BI (dashboards & KPIs)
 
-The data is normalized into these tables:
+❓ Key Business Questions
 
-- `customers` (customer info + region etc.)  
-- `orders` (order-level info)  
-- `products` (product catalog)  
-- `order_details` (line-item level: sales, quantity, profit etc.)
+How many employees fall into High, Medium, and Low salary bands per department?
 
-**Relationships:**
+What percentage of employees are in each salary band?
 
-- Each `order` links to one customer.  
-- `order_details` links orders to products (many-to-many through that table).  
+How does tenure (New, Mid, Experienced) distribute across departments?
+
+Who are the employees in the top 10% salaries per department?
+
+Which employees earn above the company-wide average salary?
+
+What is each employee’s rank within their department?
+
+📂 Repository Structure
+
+sql/        → database schema, load script, and analysis queries  
+docs/       → sample dataset, ERD  
+images/     → screenshots of dashboards (Power BI) and query results (pgAdmin)  
+README.md   → project summary and instructions  
 
 
-**Entity Relationship Diagram (ERD):**
+🚀 How to Reproduce
 
-![ERD](docs/ERD.png)
+Create a PostgreSQL database:
+In pgAdmin → right-click Databases → Create - Database → name it hr_analytics.
 
-## 📊 Power BI Integration
+Schema & Data Import
 
-For the visualization layer, I connected Power BI directly to PostgreSQL:
+Run the schema script in sql/schema.sql to create the employee table.
 
-- All SQL queries were first developed and validated in **pgAdmin**.  
-- Using the native PostgreSQL connector, these queries were imported into Power BI.  
-- This workflow allowed me to rely on **SQL for all data modeling and transformations**, keeping Power BI focused on the **visualization and storytelling** aspects.  
+Import the sample dataset employee.csv.
 
+Analysis Queries
 
-## Images shared
-- Example or query and results from top selling category [Highlight top selling category](images/Highlight_top_selling_category.png)
-- Example of profit hotspot [Profit Hotspot](images/profit_hotspot.png)
-- Ready chart on powerBI sammple of some queries into 2 different images
-     * superstore sales analysis **** [Superstore Analysis](images/superstore_analysis.png)
+Queries are in sql/analysis.sql.
+
+Examples include: salary banding with NTILE(), tenure categorization with AGE(), and ranking using RANK().
+
+📊 Power BI Integration
+
+Connected Power BI directly to PostgreSQL using the native connector.
+
+Queries first developed/validated in pgAdmin were then imported into Power BI.
+
+Visualizations include:
+
+KPI Cards → Total employees, % in each salary band
+
+Stacked Column Chart → Salary bands per department
+
+Matrix Heatmap → Tenure vs. Salary bands
+
+Scatter Plot → Salary vs. tenure with average line
+
+Bar Charts → Top 10% salaries per department
+
+Ranking Charts → Salary rank within departments
+
+📸 Images Shared
+
+Salary distribution by band per department
+
+Tenure band analysis
+
+Scatter chart with average salary reference line
+
+Ranking within departments
+
+Power BI dashboards overview
+
+📑 Queries, Analysis & Insights
+For detailed SQL queries and insights, see sql/analysis.sql
+.
+Highlights:
+
+NTILE(10) → used for decile-based salary banding.
+
+Window functions (RANK(), SUM() OVER) → ranking and percentages.
+
+CASE WHEN → tenure bands and salary categorization.
+
+🔥 Outcome
+This project demonstrates the ability to:
+
+Apply SQL analytics techniques (window functions, ranking, banding).
+
+Combine tenure and salary analysis for HR decision-making.
+
+Build BI dashboards that reveal workforce composition and high performers.
        In this one we see a overall profitability of the "company" or in this case the superstore database
      * superstore sales analisys 2 **** [Superstore Analysis 2](images/superstore_analysis_2.png)
        we can see on this image some interesting charts on how the rank changes over the years by profit and sales, that rank changes can be usefull for the impact it has on sellings
