@@ -1,40 +1,28 @@
-HR Analytics
+## HR Analytics
 
-📌 Overview
+## 📌 Overview
 This project analyzes employee data to understand salary distribution, tenure, and workforce composition.
 The goal is to identify patterns across departments and employee bands using PostgreSQL and Power BI.
 
-📊 Dataset
+## 📊 Dataset
+- Source: Sample HR dataset (public, anonymized)
+- Size: ~500 rows (this repo includes the file used: employee.csv)
+- Privacy: Public, no sensitive information
 
-Source: Sample HR dataset (public, anonymized)
+## ⚙️ Tools
+- PostgreSQL
+- SQL (CTEs, window functions, ranking, aggregations)
+- Power BI (dashboards & KPIs)
 
-Size: ~500 rows (this repo includes the file used: employee.csv)
+##❓ Key Business Questions
+- How many employees fall into High, Medium, and Low salary bands per department?
+- What percentage of employees are in each salary band?
+- How does tenure (New, Mid, Experienced) distribute across departments?
+- Who are the employees in the top 10% salaries per department?
+- Which employees earn above the company-wide average salary?
+- What is each employee’s rank within their department?
 
-Privacy: Public, no sensitive information
-
-⚙️ Tools
-
-PostgreSQL
-
-SQL (CTEs, window functions, ranking, aggregations)
-
-Power BI (dashboards & KPIs)
-
-❓ Key Business Questions
-
-How many employees fall into High, Medium, and Low salary bands per department?
-
-What percentage of employees are in each salary band?
-
-How does tenure (New, Mid, Experienced) distribute across departments?
-
-Who are the employees in the top 10% salaries per department?
-
-Which employees earn above the company-wide average salary?
-
-What is each employee’s rank within their department?
-
-📂 Repository Structure
+## 📂 Repository Structure
 
 sql/        → database schema, load script, and analysis queries  
 docs/       → sample dataset, ERD  
@@ -42,79 +30,47 @@ images/     → screenshots of dashboards (Power BI) and query results (pgAdmin)
 README.md   → project summary and instructions  
 
 
-🚀 How to Reproduce
+##🚀 How to Reproduce
+- Create a PostgreSQL database:
+- In pgAdmin → right-click Databases → Create - Database → name it hr_analytics.
+- Schema & Data Import
+- Run the schema script in sql/schema.sql to create the employee table.
+- Import the sample dataset employee.csv.
 
-Create a PostgreSQL database:
-In pgAdmin → right-click Databases → Create - Database → name it hr_analytics.
+## Analysis Queries
+- Queries are in sql/analysis.sql.
+- Examples include: salary banding with NTILE(), tenure categorization with AGE(), and ranking using RANK().
 
-Schema & Data Import
+## 📊 Power BI Integration
+- Connected Power BI directly to PostgreSQL using the native connector.
+- Queries first developed/validated in pgAdmin were then imported into Power BI.
 
-Run the schema script in sql/schema.sql to create the employee table.
+## Visualizations include:
+- KPI Cards → Total employees, % in each salary band
+- Stacked Column Chart → Salary bands per department
+- Matrix Heatmap → Tenure vs. Salary bands
+- Scatter Plot → Salary vs. tenure with average line
+- Bar Charts → Top 10% salaries per department
+- Ranking Charts → Salary rank within departments
 
-Import the sample dataset employee.csv.
+## 📸 Images Shared
+- Salary distribution by band per department
+- Tenure band analysis
+- Scatter chart with average salary reference line
+- Ranking within departments
+- Power BI dashboards overview
 
-Analysis Queries
-
-Queries are in sql/analysis.sql.
-
-Examples include: salary banding with NTILE(), tenure categorization with AGE(), and ranking using RANK().
-
-📊 Power BI Integration
-
-Connected Power BI directly to PostgreSQL using the native connector.
-
-Queries first developed/validated in pgAdmin were then imported into Power BI.
-
-Visualizations include:
-
-KPI Cards → Total employees, % in each salary band
-
-Stacked Column Chart → Salary bands per department
-
-Matrix Heatmap → Tenure vs. Salary bands
-
-Scatter Plot → Salary vs. tenure with average line
-
-Bar Charts → Top 10% salaries per department
-
-Ranking Charts → Salary rank within departments
-
-📸 Images Shared
-
-Salary distribution by band per department
-
-Tenure band analysis
-
-Scatter chart with average salary reference line
-
-Ranking within departments
-
-Power BI dashboards overview
-
-📑 Queries, Analysis & Insights
+## 📑 Queries, Analysis & Insights
 For detailed SQL queries and insights, see sql/analysis.sql
 .
-Highlights:
 
-NTILE(10) → used for decile-based salary banding.
+## Highlights:
+- NTILE(10) → used for decile-based salary banding.
+- Window functions (RANK(), SUM() OVER) → ranking and percentages.
+- CASE WHEN → tenure bands and salary categorization.
 
-Window functions (RANK(), SUM() OVER) → ranking and percentages.
-
-CASE WHEN → tenure bands and salary categorization.
-
-🔥 Outcome
+## 🔥 Outcome
 This project demonstrates the ability to:
-
-Apply SQL analytics techniques (window functions, ranking, banding).
-
-Combine tenure and salary analysis for HR decision-making.
-
-Build BI dashboards that reveal workforce composition and high performers.
-       In this one we see a overall profitability of the "company" or in this case the superstore database
-     * superstore sales analisys 2 **** [Superstore Analysis 2](images/superstore_analysis_2.png)
-       we can see on this image some interesting charts on how the rank changes over the years by profit and sales, that rank changes can be usefull for the impact it has on sellings
-       the higher number on rank means the low selling products for example or less sales.
-       We can see same for YoY growth by profit and sales and a overall top sellers each year.
-
-## Queries analysis and insights from the project
-For detailed SQL queries and insights, see [Analysis Resume](Analysis_resume.md)
+- Apply SQL analytics techniques (window functions, ranking, banding).
+- Combine tenure and salary analysis for HR decision-making.
+- Build BI dashboards that reveal workforce composition and high performers.
