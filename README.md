@@ -14,7 +14,7 @@ The goal is to identify patterns across departments and employee bands using Pos
 - SQL (CTEs, window functions, ranking, aggregations)
 - Power BI (dashboards & KPIs)
 
-##❓ Key Business Questions
+## ❓ Key Business Questions
 - How many employees fall into High, Medium, and Low salary bands per department?
 - What percentage of employees are in each salary band?
 - How does tenure (New, Mid, Experienced) distribute across departments?
