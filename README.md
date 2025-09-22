@@ -48,8 +48,6 @@ README.md   → project summary and instructions
 ## Visualizations include:
 - KPI Cards → Total employees, % in each salary band
 - Stacked Column Chart → Salary bands per department
-- Matrix Heatmap → Tenure vs. Salary bands
-- Scatter Plot → Salary vs. tenure with average line
 - Bar Charts → Top 10% salaries per department
 - Ranking Charts → Salary rank within departments
 
