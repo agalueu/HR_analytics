@@ -1,198 +1,140 @@
 This section contains SQL queries for analyzing employee data, focusing on salary, tenure, and performance metrics across departments. The queries demonstrate HR analytics skills and highlight insights for workforce planning and compensation strategies.
 
-1️⃣ Salary Distribution by Band
+## 1. Salary Distribution by Band
 
-Query Purpose:
+## Query Purpose:
 Analyze employee salary distribution across departments by categorizing salaries into High, Medium, and Low bands.
 
-Steps:
+## Steps:
+- Assign each employee a decile within their department using NTILE(10).
+- Categorize deciles into salary bands:
+    * High: Deciles 1–3
+    * Medium: Deciles 4–7
+    * Low: Deciles 8–10
+- Count the number of employees per department and salary band.
 
-Assign each employee a decile within their department using NTILE(10).
+## Business Insight:
+- Reveals salary structure per department.
+- Identifies departments with retention risks or concentration of high salaries.
+- Supports pay equity and compensation planning.
 
-Categorize deciles into salary bands:
+## 2. Percentage of Employees in Each Salary Band
 
-High: Deciles 1–3
-
-Medium: Deciles 4–7
-
-Low: Deciles 8–10
-
-Count the number of employees per department and salary band.
-
-Business Insight:
-
-Reveals salary structure per department.
-
-Identifies departments with retention risks or concentration of high salaries.
-
-Supports pay equity and compensation planning.
-
-2️⃣ Percentage of Employees in Each Salary Band
-
-Query Purpose:
+## Query Purpose:
 Calculate the percentage of employees in each salary band per department.
 
-Steps:
+## Steps:
+- Assign deciles and categorize salary bands (High, Medium, Low).
+- Count employees per department and band.
+- Calculate the percentage of employees in each band relative to the department total.
 
-Assign deciles and categorize salary bands (High, Medium, Low).
+## Business Insight:
+- Provides a normalized view of salary distribution.
+- Helps HR detect imbalances or inequities.
+- Supports strategic compensation adjustments.
 
-Count employees per department and band.
+## 3.Tenure Distribution by Department
 
-Calculate the percentage of employees in each band relative to the department total.
-
-Business Insight:
-
-Provides a normalized view of salary distribution.
-
-Helps HR detect imbalances or inequities.
-
-Supports strategic compensation adjustments.
-
-3️⃣ Tenure Distribution by Department
-
-Query Purpose:
+## Query Purpose:
 Analyze employee tenure across departments, categorized as New, Mid, Experienced.
 
-Steps:
+## Steps:
+- Calculate tenure in years for each employee.
+- Categorize employees:
+    * New: 0–2 years
+    * Mid: 2–5 years
+    * Experienced: >5 years
+- Count employees per department and tenure band.
 
-Calculate tenure in years for each employee.
+## Business Insight:
+- Highlights departments with high proportions of new hires or experienced staff.
+- Supports onboarding, training, and succession planning.
 
-Categorize employees:
+## 4.Top 10% Salaries per Department
 
-New: 0–2 years
-
-Mid: 2–5 years
-
-Experienced: >5 years
-
-Count employees per department and tenure band.
-
-Business Insight:
-
-Highlights departments with high proportions of new hires or experienced staff.
-
-Supports onboarding, training, and succession planning.
-
-4️⃣ Top 10% Salaries per Department
-
-Query Purpose:
+## Query Purpose:
 Identify employees in the top 10% of salaries within each department.
 
-Steps:
+## Steps:
+- Assign deciles and ranks to employees by salary per department.
+- Filter for employees in decile 1 (top 10%).
 
-Assign deciles and ranks to employees by salary per department.
+## Business Insight:
+- Reveals key high-earning talent.
+- Helps with retention, succession planning, and budgeting.
 
-Filter for employees in decile 1 (top 10%).
+## 5.Top 2 Salaries per Department
 
-Business Insight:
-
-Reveals key high-earning talent.
-
-Helps with retention, succession planning, and budgeting.
-
-5️⃣ Top 2 Salaries per Department
-
-Query Purpose:
+## Query Purpose:
 Find the top 2 highest-paid employees in each department.
 
-Steps:
+## Steps:
+- Calculate department-level salary ranks.
+- Select employees with rank ≤ 2.
+- Include department average salary for comparison.
 
-Calculate department-level salary ranks.
+## Business Insight:
+- Identifies top earners and benchmarks them against departmental averages.
+- Supports compensation strategy and talent recognition.
 
-Select employees with rank ≤ 2.
+## 6.Employee Rank Within Department
 
-Include department average salary for comparison.
-
-Business Insight:
-
-Identifies top earners and benchmarks them against departmental averages.
-
-Supports compensation strategy and talent recognition.
-
-6️⃣ Employee Rank Within Department
-
-Query Purpose:
+## Query Purpose:
 Assign a salary-based rank to each employee within their department.
 
-Steps:
+## Steps:
+- Select employee details.
+- Calculate rank using RANK() OVER (PARTITION BY department ORDER BY salary DESC).
 
-Select employee details.
+## Business Insight:
+- Provides insight into relative positioning of employees.
+- Useful for performance reviews, promotions, and equity analysis.
 
-Calculate rank using RANK() OVER (PARTITION BY department ORDER BY salary DESC).
+## 7. Salary vs. Overall Average and Tenure
 
-Business Insight:
-
-Provides insight into relative positioning of employees.
-
-Useful for performance reviews, promotions, and equity analysis.
-
-7️⃣ Salary vs. Overall Average and Tenure
-
-Query Purpose:
+## Query Purpose:
 Compare each employee’s salary to the company-wide average and calculate tenure.
 
-Steps:
+## Steps:
+- Calculate overall average salary.
+- Compute tenure in years.
+- Categorize salary as Above Average or At/Below Average.
 
-Calculate overall average salary.
+## Business Insight:
+- Assesses compensation equity relative to experience.
+- Helps identify employees for potential salary adjustments or development opportunities.
 
-Compute tenure in years.
+## 8.Top 2 Highest-Paid Employees with 5+ Years Tenure
 
-Categorize salary as Above Average or At/Below Average.
-
-Business Insight:
-
-Assesses compensation equity relative to experience.
-
-Helps identify employees for potential salary adjustments or development opportunities.
-
-8️⃣ Top 2 Highest-Paid Employees with 5+ Years Tenure
-
-Query Purpose:
+## Query Purpose:
 Identify top earners with significant experience in each department.
 
-Steps:
+## Steps:
+- Calculate salary rank per department.
+- Compute tenure in years.
+- Filter for rank ≤ 2 and tenure ≥ 5 years.
 
-Calculate salary rank per department.
+## Business Insight:
+- Highlights high-performing, experienced employees.
+- Supports succession planning and retention strategies.
 
-Compute tenure in years.
+## 9.Top 2 Highest-Paid Employees per Department with 5+ Years Tenure
 
-Filter for rank ≤ 2 and tenure ≥ 5 years.
-
-Business Insight:
-
-Highlights high-performing, experienced employees.
-
-Supports succession planning and retention strategies.
-
-9️⃣ Top 2 Highest-Paid Employees per Department with 5+ Years Tenure
-
-Query Purpose:
+## Query Purpose:
 Identify the top 2 highest-paid employees in each department who have more than 5 years of tenure, combining compensation and experience to highlight key contributors.
 
-Steps:
+## Steps:
+- Create a CTE (result) to select employee details: employee ID, first name, last name, department, salary, hire date.
+- Use a second CTE (ranked) to:
+- Assign a salary rank within each department using:
+- RANK() OVER (PARTITION BY department ORDER BY salary DESC)
+- Calculate tenure in years using:
+- EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date))
+- Filter for employees who are ranked in the top 2 salaries and have tenure ≥ 5 years.
+- Output all relevant employee information for these top earners.
 
-Create a CTE (result) to select employee details: employee ID, first name, last name, department, salary, hire date.
-
-Use a second CTE (ranked) to:
-
-Assign a salary rank within each department using:
-
-RANK() OVER (PARTITION BY department ORDER BY salary DESC)
-
-
-Calculate tenure in years using:
-
-EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date))
-
-
-Filter for employees who are ranked in the top 2 salaries and have tenure ≥ 5 years.
-
-Output all relevant employee information for these top earners.
-
-Business Insight:
-
-Highlights experienced high performers critical to department success.
-
-Supports succession planning, retention strategies, and reward allocation.
+## Business Insight:
+- Highlights experienced high performers critical to department success.
+- Supports succession planning, retention strategies, and reward allocation.
 
 Combines salary and tenure metrics for more nuanced workforce analysis.
