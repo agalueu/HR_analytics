@@ -1,175 +1,196 @@
---1. Profit hotspot (TOP and BOTTOM KPIs on power BI)
-WITH sales AS (
-	SELECT  c.region, c.segment, 
-			ROUND(SUM(od.sales), 2) AS total_sales, --total sales per region/segment
-			ROUND(SUM(od.profit), 2) AS total_profit --total profit per region/segment
-	FROM customers c
-	JOIN orders o ON c.customer_id = o.customer_id --inner JOIN just because we want only customers that has an order
-	JOIN order_details od ON o.order_id = od.order_id --only orders that has an order details
-	GROUP BY c.region, c.segment
+-- 1. How many employees fall into High, Medium, and Low salary bands per department?
+WITH information AS (
+
+	SELECT  employee_id,
+			department,
+			salary,
+			NTILE(10) OVER (PARTITION BY department ORDER BY salary DESC) AS decile
+	FROM employee
 )
 
-SELECT  region AS "Region",
-		segment AS "Segment",
-		total_sales AS "Total Sales",
-		total_profit AS "Total Profit",
-		ROUND(total_profit/total_sales * 100, 2) AS "Profit Margin"
-FROM sales
-ORDER BY "Profit Margin" DESC, region, segment;
+SELECT  COUNT(employee_id):: numeric AS "Employees", 
+		department AS "Department",
+		CASE 
+			WHEN decile BETWEEN 1 AND 3 THEN 'High Salary'
+			WHEN decile BETWEEN 4 AND 7 THEN 'Medium Salary'
+			WHEN decile BETWEEN 8 AND 10 THEN 'Low Salary'
+		END AS "Salary Bands"
+FROM information
+GROUP BY department, "Salary Bands"
+ORDER BY "Salary Bands"
 
---2. total sales per product
-SELECT  p.product_name,
-		EXTRACT(YEAR FROM (o.order_date)) AS year,
-		SUM(sales) AS total_sales
-FROM products p
-JOIN order_details oi ON p.product_id = oi.product_id
-JOIN orders o ON oi.order_id = o.order_id
-GROUP BY p.product_name, EXTRACT(YEAR FROM (o.order_date))
-ORDER BY total_sales DESC
-/*the ORDER BY clause will show in the table the result we want, for example, if we want the product that performance more sales per year, we should
-do ORDER BY year, total_sales DESC, if we want the product that overall the years performance the most selling just do ORDER BY total_sales DESC*/
 
---3. Sales trends by Category
-WITH sales AS (
-	SELECT p.category, EXTRACT (YEAR FROM (o.order_date)) AS year, ROUND(SUM(od.sales), 2) AS total_sales
-	FROM products p
-	JOIN order_details od ON p.product_id = od.product_id
-	JOIN orders o ON od.order_id = o.order_id
-	GROUP BY p.category, EXTRACT (YEAR FROM (o.order_date))
+-- 2. What percentage of employees are in each salary band?
+WITH information AS (
+
+	SELECT  employee_id,
+			department,
+			salary,
+			NTILE(10) OVER (PARTITION BY department ORDER BY salary DESC) AS decile
+	FROM employee
 ),
 
-preview AS (
-	SELECT *, LAG (total_sales) OVER (PARTITION BY category ORDER BY year) AS previews_value
-	FROM sales
+bands AS (
+
+	SELECT  COUNT(employee_id):: numeric AS employees, 
+			department,
+			CASE 
+				WHEN decile BETWEEN 1 AND 3 THEN 'High Salary'
+				WHEN decile BETWEEN 4 AND 7 THEN 'Medium Salary'
+				WHEN decile BETWEEN 8 AND 10 THEN 'Low Salary'
+			END AS Salary_bands
+	FROM information
+	GROUP BY department, salary_bands
 )
 
-SELECT  category AS "Category",
-		year AS "Year",
-		total_sales AS "Total Sales",
-		ROUND((total_sales - previews_value)/NULLIF(previews_value, 0) * 100, 2) AS "YoY Growth"
-FROM preview;
+SELECT  employees AS "Employees",
+		department AS "Department",
+		salary_bands AS "Salary Bands",
+		ROUND((employees:: numeric / SUM(employees) OVER (PARTITION BY department)) * 100, 2) AS "Percentage per Band"
+FROM bands
+ORDER BY department, salary_bands;
 
---4. Compute YoY growth for both sales and profit. AND show rank changes from the previous year for each category
---This is showing on power BI in rank changes over years and year over year Growth
-WITH sales AS (
-	SELECT  p.category,
-		c.region,
-		EXTRACT (YEAR FROM(o.order_date)) AS year,
-		ROUND(SUM(od.sales), 2) AS total_sales,
-		ROUND(SUM(od.profit), 2) AS total_profit
-	FROM customers c
-	JOIN orders o ON c.customer_id = o.customer_id
-	JOIN order_details od ON o.order_id = od.order_id
-	JOIN products p ON od.product_id = p.product_id
-	GROUP BY p.category, c.region, EXTRACT (YEAR FROM(o.order_date))
+-- 3. How does tenure (New, Mid, Experienced) distribute across departments?
+WITH information AS (
+
+	SELECT  employee_id,
+			department,
+			EXTRACT (YEAR FROM AGE(CURRENT_DATE, hire_date)) AS tenure
+	FROM employee
+),
+
+bands AS (
+
+	SELECT  COUNT(employee_id):: numeric AS employees, 
+			department,
+			CASE
+				WHEN tenure BETWEEN 0 AND 2 THEN 'New'
+				WHEN tenure BETWEEN 2 AND 5 THEN 'Mid'
+				WHEN tenure > 5 THEN 'Experienced'
+			ELSE
+				'Unknown Hire date'
+			END AS tenure_band
+	FROM information
+	GROUP BY department, tenure_band
+)
+
+SELECT  employees AS "Employees",
+		department AS "Department",
+		tenure_band AS "Tenure Band",
+FROM bands
+ORDER BY department, tenure_band;
+
+-- 4. Who are the employees in the top 10% salaries per department?
+WITH result AS(
+	SELECT  first_name,
+			last_name,
+			department,
+			salary,
+			hire_date
+	FROM employee
 ),
 
 ranked AS (
-	SELECT  *,
-		RANK () OVER (PARTITION BY region, year ORDER BY total_sales DESC) AS rank_by_sales,
-		RANK () OVER (PARTITION BY region, year ORDER BY total_profit DESC) AS rank_by_profit,
-		SUM(total_sales) OVER (PARTITION BY region, category ORDER BY year) AS cumulative_sales,
-		COALESCE(LAG (total_sales) OVER (PARTITION BY region, category ORDER BY year), 0) AS previews_sale,
-		COALESCE(LAG (total_profit) OVER (PARTITION BY region, category ORDER BY year), 0) AS previews_profit
-	FROM sales
+	SELECT *, RANK () OVER (PARTITION BY department ORDER BY salary DESC) AS rank,
+	NTILE(10) OVER (PARTITION BY department ORDER BY salary DESC) AS decile
+	FROM result
+)
+
+SELECT *
+FROM ranked
+WHERE decile = 1
+;
+
+-- 5. Which employees earn above the company-wide average salary? (TOP 2)
+WITH result AS(
+	SELECT  first_name,
+			last_name,
+			department,
+			salary,
+			ROUND(AVG(salary) OVER (PARTITION BY department), 0) AS avg_department_salary
+	FROM employee
 ),
 
-final_results AS (
-	SELECT  *,
-		COALESCE(ROUND((total_sales - previews_sale)/NULLIF(previews_sale, 0) * 100, 2), 0) AS YoY_sales,
-		COALESCE(ROUND((total_profit - previews_profit)/NULLIF(previews_profit, 0) * 100, 2), 0) AS YoY_profit,
-		LAG (rank_by_sales) OVER (PARTITION BY region, category ORDER BY year) AS previews_rank_sale,
-		LAG (rank_by_profit) OVER (PARTITION BY region, category ORDER BY year) AS previews_rank_profit
-	FROM ranked
+ranked AS (
+	SELECT *, RANK () OVER (PARTITION BY department ORDER BY salary DESC) AS rank
+	FROM result
 )
 
-SELECT  category AS "Category",
-		region AS "Region",
-		year AS "Year",
-		total_sales AS "Total Sales",
-		total_profit AS "Total Profit",
-		cumulative_sales AS "Cumulative Sales",
-		yoy_sales AS "Year over Year Growth by sales",
-		yoy_profit AS "Year over Year Growth by profit",
-		--previews_rank_sale,
-		rank_by_sales AS "Rank by Sales",
-		--previews_rank_profit,
-		rank_by_profit AS "Rank by Profit",
-		-1 * (rank_by_sales - previews_rank_sale) AS "Rank changes by Sales",
-		-1 * (rank_by_profit - previews_rank_profit) AS "Rank changes by Profit"
-FROM final_results
-ORDER BY category, region, year;
+SELECT *
+FROM ranked
+WHERE rank <=2;
 
---5. Highlight the top-selling category each year.
-WITH total AS (
-	SELECT /*p.product_name,*/ p.category, EXTRACT(YEAR FROM (o.order_date)) AS year, SUM(od.sales) AS total_sales, SUM(od.profit) AS total_profit
-	FROM products p
-	JOIN order_details od ON p.product_id = od.product_id
-	JOIN orders o ON od.order_id = o.order_id
-	GROUP BY /*p.product_name,*/ p.category, EXTRACT(YEAR FROM (o.order_date))
+
+-- 6. What is each employee’s rank within their department?
+SELECT  first_name AS "First Name",
+		last_name AS "Last Name",
+		department AS "Department",
+		hire_date AS "Hire date",
+		salary AS "Salary",
+		RANK () OVER (PARTITION BY department ORDER BY salary DESC) AS "Rank by salary"
+FROM employee;
+
+--EXTRA QUERIES
+
+-- 7. AVG salary and tenure
+WITH overall_avg AS (
+	SELECT  employee_id,
+			first_name,
+			last_name,
+			salary,
+			department,
+			ROUND((SELECT (AVG(salary)) FROM employee), 2) AS avg_overall,
+			hire_date
+	FROM employee
+)
+
+SELECT  employee_id, first_name, last_name, salary, hire_date, department,
+		EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date)) AS tenure_in_years,
+		CASE
+			WHEN salary > avg_overall THEN 'Above average'
+			ELSE 'At or Below Average'
+		END AS salary_status
+FROM overall_avg
+ORDER BY department;
+
+-- 8. Employees Performance and salary status
+WITH overall_avg AS (
+	SELECT  employee_id,
+			first_name,
+			last_name,
+			salary,
+			department,
+			ROUND((SELECT (AVG(salary)) FROM employee), 2) AS avg_overall,
+			hire_date
+	FROM employee
+)
+
+SELECT  employee_id, first_name, last_name, salary, hire_date, department,
+		EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date)) AS tenure_in_years,
+		CASE
+			WHEN salary > avg_overall THEN 'Above average'
+			ELSE 'At or Below Average'
+		END AS salary_status
+FROM overall_avg
+ORDER BY tenure_in_years;
+
+-- 9. Find top 2 highest-paid employees per department who also have more than 5 years of tenure.
+WITH result AS(
+	SELECT  employee_id,
+			first_name,
+			last_name,
+			department,
+			salary,
+			hire_date
+	FROM employee
 ),
 
-ranked As (
-	SELECT  *,
-			DENSE_RANK () OVER (PARTITION BY year ORDER BY total_sales DESC) AS rank
-	FROM total
+ranked AS (
+	SELECT *, RANK () OVER (PARTITION BY department ORDER BY salary DESC) AS rank,
+	EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date)) AS tenure_in_years
+	FROM result
 )
 
-SELECT  category AS "Category",
-		year AS "Year",
-		total_sales AS "Total Sales",
-		total_profit AS "Total Profit",
-		rank AS "Rank"
+SELECT *
 FROM ranked
-WHERE rank = 1;
-
---Key business question
---6. Which product categories and subcategories drive the most profit?
-WITH sales AS (
-	SELECT  p.category,
-		c.region,
-		EXTRACT (YEAR FROM(o.order_date)) AS year,
-		ROUND(SUM(od.sales), 2) AS total_sales,
-		ROUND(SUM(od.profit), 2) AS total_profit
-	FROM customers c
-	JOIN orders o ON c.customer_id = o.customer_id
-	JOIN order_details od ON o.order_id = od.order_id
-	JOIN products p ON od.product_id = p.product_id
-	GROUP BY p.category, c.region, EXTRACT (YEAR FROM(o.order_date))
-)
-
-SELECT  category AS "Category",
-		region AS "Region",
-		year AS "Year",
-		total_sales AS "Total Sales",
-		total_profit AS "Total Profit",
-		RANK () OVER (PARTITION BY region, year ORDER BY total_sales DESC) AS "Rank by Sales",
-		RANK () OVER (PARTITION BY region, year ORDER BY total_profit DESC) AS "Rank by Profit"
-FROM sales;
-
---7. What customer segments and region combined are most valuable?
-WITH ranked AS (
-	SELECT  c.region, c.segment,
-			ROUND(SUM(od.sales), 2) AS total_sales,
-			ROUND(SUM(od.profit), 2) AS total_profit, 
-			ROUND(  SUM(od.profit)/SUM(od.sales) * 100, 2) AS profit_margin_pct,
-			DENSE_RANK () OVER (PARTITION BY c.region ORDER BY SUM(od.sales) DESC) AS rank_by_sales,
-			DENSE_RANK () OVER (PARTITION BY c.region ORDER BY SUM(od.profit) DESC) AS rank_by_profit,
-			DENSE_RANK () OVER (PARTITION BY c.region ORDER BY (SUM(od.profit)/SUM(od.sales)) DESC) AS rank_by_margin
-	FROM customers c
-	JOIN orders o ON c.customer_id = o.customer_id
-	JOIN order_details od ON o.order_id = od.order_id
-	GROUP BY c.region, c.segment
-)
-
-SELECT  region AS "Region",
-		segment AS "Segment",
-		total_sales AS "Total Sales",
-		total_profit AS "Total Profit",
-		rank_by_sales AS "Rank by Sales",
-		rank_by_profit AS "Rank by Profit",
-		rank_by_margin AS "Margin Rank",
-		(rank_by_sales + rank_by_profit + rank_by_margin) / 3 AS "Overall Performer"
-FROM ranked
-
-ORDER BY region, "Overall Performer";
+WHERE rank <=2 AND tenure_in_years >= 5;
