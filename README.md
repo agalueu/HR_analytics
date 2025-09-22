@@ -19,7 +19,7 @@ The goal is to identify patterns across departments and employee bands using Pos
 - What percentage of employees are in each salary band?
 - How does tenure (New, Mid, Experienced) distribute across departments?
 - Who are the employees in the top 10% salaries per department?
-- Which employees earn above the company-wide average salary?
+- Which employees earn above the company-wide average salary? (TOP 2)
 - What is each employee’s rank within their department?
 
 ## 📂 Repository Structure
