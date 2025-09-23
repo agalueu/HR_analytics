@@ -174,7 +174,7 @@ SELECT  employee_id, first_name, last_name, salary, hire_date, department,
 FROM overall_avg
 ORDER BY tenure_in_years;
 
--- 9. Find top 2 highest-paid employees per department who also have more than 5 years of tenure.
+-- 9. Find top 2 highest-paid employees per department who also have more than 1 year of tenure.
 WITH result AS(
 	SELECT  employee_id,
 			first_name,
@@ -193,4 +193,5 @@ ranked AS (
 
 SELECT *
 FROM ranked
-WHERE rank <=2 AND tenure_in_years >= 5;
+WHERE rank <=2 AND tenure_in_years >= 1;
+
