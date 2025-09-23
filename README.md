@@ -62,7 +62,6 @@ Each department can have many employees.
 
 ![ERD](docs/ERD.png)
 
-
 ## Analysis Queries
 - Queries are in [Analysis](sql/Analysis.sql)
 - Examples include: salary banding with NTILE(), tenure categorization with AGE(), and ranking using RANK().
