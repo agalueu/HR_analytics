@@ -1,4 +1,4 @@
-This section contains SQL queries for analyzing employee data, focusing on salary, tenure, and performance metrics across departments. The queries demonstrate HR analytics skills and highlight insights for workforce planning and compensation strategies.
+This section contains SQL [queries](sql/Analysis.sql) for analyzing employee data, focusing on salary, tenure, and performance metrics across departments. The queries demonstrate HR analytics skills and highlight insights for workforce planning and compensation strategies. 
 
 # 1. Salary Distribution by Band
 ### Query Purpose:
