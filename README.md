@@ -42,26 +42,25 @@ README.md   → project summary and instructions
 The dataset was structured into two tables:
 
 ### employee
-employee_id → unique identifier for employees
-first_name, last_name → employee names
-department → department name (string reference to department table)
-hire_date → employee hire date
-salary → employee salary
-performance_score → performance metric
+- employee_id → unique identifier for employees
+- first_name, last_name → employee names
+- department → department name (string reference to department table)
+- hire_date → employee hire date
+- salary → employee salary
+- performance_score → performance metric
 
 ### department
-department_id → unique identifier for departments
-department_name → department name
-manager → department manager
+- department_id → unique identifier for departments
+- department_name → department name
+- manager → department manager
 
 ### Relationships
 Each employee belongs to one department (via the department column).
 Each department can have many employees.
 
-## Entity Relationship Diagram (ERD)
-department (department_id, department_name, manager)
-        │
-        └───< employee (employee_id, first_name, last_name, department, hire_date, salary, performance_score)
+### Entity Relationship Diagram (ERD):
+
+![ERD](docs/ERD.png)
 
 
 ## Analysis Queries
