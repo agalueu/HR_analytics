@@ -17,6 +17,8 @@ Analyze employee salary distribution across departments by categorizing salaries
 - Identifies departments with retention risks or concentration of high salaries.
 - Supports pay equity and compensation planning.
 
+Sample img: [Salary bands](images/query_salary_bands.png)
+
 # 2. Percentage of Employees in Each Salary Band
 ### Query Purpose:
 Calculate the percentage of employees in each salary band per department.
@@ -30,6 +32,8 @@ Calculate the percentage of employees in each salary band per department.
 - Provides a normalized view of salary distribution.
 - Helps HR detect imbalances or inequities.
 - Supports strategic compensation adjustments.
+
+Sample img: [% of Employees on each salary band](images/query_salary_bands_percentage.png)
 
 # 3.Tenure Distribution by Department
 ### Query Purpose:
@@ -47,6 +51,8 @@ Analyze employee tenure across departments, categorized as New, Mid, Experienced
 - Highlights departments with high proportions of new hires or experienced staff.
 - Supports onboarding, training, and succession planning.
 
+Sample img: [Tenure distribution](images/query_tenure.png)
+
 # 4.Top 10% Salaries per Department
 ### Query Purpose:
 Identify employees in the top 10% of salaries within each department.
@@ -58,6 +64,8 @@ Identify employees in the top 10% of salaries within each department.
 ### Business Insight:
 - Reveals key high-earning talent.
 - Helps with retention, succession planning, and budgeting.
+
+Sample img: [top 10% salary](images/query_10%.png)
 
 # 5.Top 2 Salaries per Department
 ### Query Purpose:
@@ -72,6 +80,8 @@ Find the top 2 highest-paid employees in each department.
 - Identifies top earners and benchmarks them against departmental averages.
 - Supports compensation strategy and talent recognition.
 
+Sample img: [Top 2 salaries per department](images/query_top2.png)
+
 # 6.Employee Rank Within Department
 ### Query Purpose:
 Assign a salary-based rank to each employee within their department.
@@ -83,6 +93,8 @@ Assign a salary-based rank to each employee within their department.
 ### Business Insight:
 - Provides insight into relative positioning of employees.
 - Useful for performance reviews, promotions, and equity analysis.
+
+Sample img: [Rank within department](images/query_rank.png)
 
 # 7. Salary vs. Overall Average and Tenure
 ### Query Purpose:
@@ -97,7 +109,9 @@ Compare each employee’s salary to the company-wide average and calculate tenur
 - Assesses compensation equity relative to experience.
 - Helps identify employees for potential salary adjustments or development opportunities.
 
-# 8.Top 2 Highest-Paid Employees with 5+ Years Tenure
+Sample img: [Salary vs Avg and tenure](images/query_avg_tenure.png)
+
+# 8.Employees Performance and salary status
 ### Query Purpose:
 Identify top earners with significant experience in each department.
 
@@ -109,6 +123,8 @@ Identify top earners with significant experience in each department.
 ### Business Insight:
 - Highlights high-performing, experienced employees.
 - Supports succession planning and retention strategies.
+
+Sample img: [Performance](images/query_performance.png)
 
 # 9.Top 2 Highest-Paid Employees per Department with 5+ Years Tenure
 ### Query Purpose:
@@ -129,3 +145,7 @@ Identify the top 2 highest-paid employees in each department who have more than 
 - Supports succession planning, retention strategies, and reward allocation.
 
 Combines salary and tenure metrics for more nuanced workforce analysis.
+
+For this sample as the data is totally syntetic, i modified from 5 years to 1 year in order to actually got a result, that way I tested that the query actually works.
+
+Sample img: [Highest paid with tenure](images/query_highest_paid.png)
