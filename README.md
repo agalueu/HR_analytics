@@ -31,7 +31,6 @@ README.md   → project summary and instructions
 
 
 ## 🚀 How to Reproduce
-1. Create a new PostgreSQL database:
 - Create a PostgreSQL database:
 - In pgAdmin → right-click Databases → Create - Database → name it hr_analytics.
 - Schema & Data Import
