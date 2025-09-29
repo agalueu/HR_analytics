@@ -70,13 +70,13 @@ For the visualization layer, I connected Power BI directly to PostgreSQL:
   - Using the native PostgreSQL connector, these queries were imported into Power BI.  
   - This workflow allowed me to rely on **SQL for all data modeling and transformations**, keeping Power BI focused on the **visualization and storytelling** aspects.  
 
-# Visualizations include:
+## Visualizations include:
 - KPI Cards → Total employees, % in each salary band
 - Stacked Column Chart → Salary bands per department
 - Bar Charts → Top 10% salaries per department
 - Ranking Charts → Salary rank within departments
 
-# 📸 Images Shared
+## 📸 Images Shared
 - Salary distribution by band per department [Salary Distribution](images/Salary_distribution.png)
 - Tenure band analysis [Tenure band](images/ternure_bands.png)
 - Ranking within departments [Rank](images/Rank_by_departments.png)
