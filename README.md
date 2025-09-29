@@ -29,14 +29,6 @@ docs/       → sample dataset, ERD
 images/     → screenshots of dashboards (Power BI) and query results (pgAdmin)  
 README.md   → project summary and instructions  
 
-
-## 🚀 How to Reproduce
-- Create a PostgreSQL database:
-- In pgAdmin → right-click Databases → Create - Database → name it hr_analytics.
-- Schema & Data Import
-- Run the schema script in sql/schema.sql to create the employee table, can copy [SCHEMA](sql/SCHEMA.sql).
-- Import the sample dataset HR_employee.csv and HR_departments.cvs.
-
 ## 🗄 Database Schema & ERD
 The dataset was structured into two tables:
 
@@ -61,24 +53,30 @@ Each department can have many employees.
 
 ![ERD](docs/ERD.png)
 
+## 🔄 How to Reproduce
+- Create a PostgreSQL database:
+- In pgAdmin → right-click Databases → Create - Database → name it hr_analytics.
+- Schema & Data Import
+- Run the schema script in sql/schema.sql to create the employee table, can copy [SCHEMA](sql/SCHEMA.sql).
+- Import the sample dataset HR_employee.csv and HR_departments.cvs.
+
 ## Analysis Queries
 - Queries are in [Analysis](sql/Analysis.sql)
 - Examples include: salary banding with NTILE(), tenure categorization with AGE(), and ranking using RANK().
 
 ## 📊 Power BI Integration
 For the visualization layer, I connected Power BI directly to PostgreSQL:
+  - All SQL queries were first developed and validated in **pgAdmin**.  
+  - Using the native PostgreSQL connector, these queries were imported into Power BI.  
+  - This workflow allowed me to rely on **SQL for all data modeling and transformations**, keeping Power BI focused on the **visualization and storytelling** aspects.  
 
-- All SQL queries were first developed and validated in **pgAdmin**.  
-- Using the native PostgreSQL connector, these queries were imported into Power BI.  
-- This workflow allowed me to rely on **SQL for all data modeling and transformations**, keeping Power BI focused on the **visualization and storytelling** aspects.  
-
-## Visualizations include:
+# Visualizations include:
 - KPI Cards → Total employees, % in each salary band
 - Stacked Column Chart → Salary bands per department
 - Bar Charts → Top 10% salaries per department
 - Ranking Charts → Salary rank within departments
 
-## 📸 Images Shared
+# 📸 Images Shared
 - Salary distribution by band per department [Salary Distribution](images/Salary_distribution.png)
 - Tenure band analysis [Tenure band](images/ternure_bands.png)
 - Ranking within departments [Rank](images/Rank_by_departments.png)
