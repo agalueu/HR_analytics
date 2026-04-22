@@ -62,3 +62,24 @@ README.md   → documentation
 ## 🔄 How to Reproduce
 
 1. Create database:
+2. Run schema:
+3. Import CSV files into PostgreSQL
+4. Run: sql/analysis.sql
+
+
+---
+
+## 📊 Power BI Dashboard
+- KPI cards → total employees, salary distribution
+- Salary band distribution per department
+- Ranking visualization
+- Tenure analysis
+
+---
+
+## ✅ Key Takeaways
+- NTILE() for segmentation
+- RANK() for ranking analysis
+- Window functions for advanced analytics
+- Combining salary + tenure improves HR insights
+- SQL-first approach improves BI efficiency
