@@ -1,22 +1,26 @@
-CREATE TABLE IF NOT EXISTS employee (
-	employee_id INTEGER,
-	first_name TEXT,
-	last_name TEXT,
-	department TEXT,
-	hire_date DATE,
-	salary INT,
-	performance_score INT
-); --information about employees
+DROP TABLE IF EXISTS employee CASCADE;
+DROP TABLE IF EXISTS department CASCADE;
 
-CREATE TABLE IF NOT EXISTS department (
-	deparment_id INTEGER,
-	department_name TEXT,
-	manager TEXT
-); --information about departments
+CREATE TABLE department (
+    department_id SERIAL PRIMARY KEY,
+    department_name TEXT UNIQUE,
+    manager TEXT
+);
 
-/* The data we use here was completly systemic, so some values makes no sense like hire_date on 2035, that´s why the fastest
-way to just get the data correctly without going row by row changing the date was doing a simple update on hire_date like this:*/
+CREATE TABLE employee (
+    employee_id SERIAL PRIMARY KEY,
+    first_name TEXT,
+    last_name TEXT,
+    department TEXT,
+    hire_date DATE,
+    salary INT,
+    performance_score INT,
+    CONSTRAINT fk_department
+        FOREIGN KEY (department)
+        REFERENCES department(department_name)
+);
+
+-- Fix invalid future dates
 UPDATE employee
 SET hire_date = NULL
 WHERE hire_date > CURRENT_DATE;
-
