@@ -1,94 +1,64 @@
-## 👥 HR Analytics
+# 👥 HR Analytics
 
 ## 📌 Overview
 This project analyzes employee data to understand salary distribution, tenure, and workforce composition.
-The goal is to identify patterns across departments and employee bands using PostgreSQL and Power BI.
+
+The objective is to identify patterns across departments using PostgreSQL for data analysis and Power BI for visualization.
+
+---
 
 ## 📊 Dataset
-- Source: Sample HR dataset (public, anonymized)
-- Size: small data 20 em ployees 5 departments (this repo includes the file used: HR_employee.csv and HR_departments.cvs)
-- Privacy: Public, no sensitive information
+- Source: Synthetic HR dataset (public, anonymized)
+- Size: 20 employees, 5 departments
+- Files included:
+  - HR_employee.csv
+  - HR_departments.csv
 
-🌐 Original Data Source
-The dataset is a synthetic HR dataset that includes employee demographics, department information, performance scores, and salaries.
+---
 
 ## 🛠️ Tools & Technologies
 - PostgreSQL
 - SQL (CTEs, window functions, ranking, aggregations)
-- Power BI (dashboards & KPIs)
+- Power BI
+
+---
 
 ## ❓ Key Business Questions
-- How many employees fall into High, Medium, and Low salary bands per department?
-- What percentage of employees are in each salary band?
-- How does tenure (New, Mid, Experienced) distribute across departments?
-- Who are the employees in the top 10% salaries per department?
-- Which employees earn above the company-wide average salary? (TOP 2)
-- What is each employee’s rank within their department?
+- Salary distribution across departments
+- Percentage of employees per salary band
+- Tenure distribution
+- Top earners per department
+- Ranking employees by salary
+- Salary vs experience analysis
+
+---
 
 ## 📂 Repository Structure
 
-sql/        → database schema, load script, and analysis queries  
-docs/       → sample dataset, ERD  
-images/     → screenshots of dashboards (Power BI) and query results (pgAdmin)  
-README.md   → project summary and instructions  
+sql/        → schema + analysis queries  
+docs/       → dataset + ERD  
+images/     → dashboards & query outputs  
+README.md   → documentation  
 
-## 🗄 Database Schema & ERD
-The dataset was structured into two tables:
+---
+
+## 🗄 Database Schema
 
 ### employee
-- employee_id → unique identifier for employees
-- first_name, last_name → employee names
-- department → department name (string reference to department table)
-- hire_date → employee hire date
-- salary → employee salary
-- performance_score → performance metric
+- employee_id (PK)
+- first_name, last_name
+- department (FK → department.department_name)
+- hire_date
+- salary
+- performance_score
 
 ### department
-- department_id → unique identifier for departments
-- department_name → department name
-- manager → department manager
+- department_id (PK)
+- department_name (unique)
+- manager
 
-### Relationships
-Each employee belongs to one department (via the department column).
-Each department can have many employees.
-
-### 📌 Entity Relationship Diagram (ERD):
-
-![ERD](docs/ERD.png)
+---
 
 ## 🔄 How to Reproduce
-- Create a PostgreSQL database:
-- In pgAdmin → right-click Databases → Create - Database → name it hr_analytics.
-- Schema & Data Import
-- Run the schema script in sql/schema.sql to create the employee table, can copy [SCHEMA](sql/SCHEMA.sql).
-- Import the sample dataset HR_employee.csv and HR_departments.cvs.
 
-## Analysis Queries
-- Queries are in [Analysis](sql/Analysis.sql)
-- Examples include: salary banding with NTILE(), tenure categorization with AGE(), and ranking using RANK().
-
-## 📊 Power BI Dashboard
-For the visualization layer, I connected Power BI directly to PostgreSQL:
-  - All SQL queries were first developed and validated in **pgAdmin**.  
-  - Using the native PostgreSQL connector, these queries were imported into Power BI.  
-  - This workflow allowed me to rely on **SQL for all data modeling and transformations**, keeping Power BI focused on the **visualization and storytelling** aspects.  
-  - Visualizations include:
-    * KPI Cards → Total employees, % in each salary band
-    * Stacked Column Chart → Salary bands per department
-    * Bar Charts → Top 10% salaries per department
-    * Ranking Charts → Salary rank within departments
-- Salary distribution by band per department [Salary Distribution](images/Salary_distribution.png)
-- Tenure band analysis [Tenure band](images/ternure_bands.png)
-- Ranking within departments [Rank](images/Rank_by_departments.png)
-- Power BI dashboards overview [Overview](images/Overview.png)
-
-## ✅ Key Takeaways
-- NTILE(10) → used for decile-based salary banding.
-- Window functions (RANK(), SUM() OVER) → ranking and percentages.
-- CASE WHEN → tenure bands and salary categorization.
-- Apply SQL analytics techniques (window functions, ranking, banding).
-- Combine tenure and salary analysis for HR decision-making.
-- Build BI dashboards that reveal workforce composition and high performers.
-- Employee performance is correlated with tenure and salary.
-- Certain departments show higher turnover risks based on salary disparities.
-- Identifying top performers by tenure and compensation helps guide retention strategies.
+1. Create database:
